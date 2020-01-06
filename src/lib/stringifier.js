@@ -26,8 +26,9 @@ function stringify(node, prec) {
       }
 
       str += order[op] ? ` ${node.operator} ` : node.operator;
-
-      if (right.type === 'MathExpression' && order[op] < order[right.operator]) {
+      
+      // @fix: postcss-values-parser error
+      if (right.type === 'MathExpression' && order[op] < order[right.operator] || right.type === 'Value' && right.value < 0) {
         str += `(${stringify(right, prec)})`;
       } else {
         str += stringify(right, prec);
