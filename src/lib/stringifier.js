@@ -19,16 +19,16 @@ function stringify(node, prec) {
       const {left, right, operator: op} = node;
       let str = "";
 
-      if (left.type === 'MathExpression' && order[op] < order[left.operator]) {
+      if (left.type === 'MathExpression' && order[op] < order[left.operator] || left.type === 'Number' && left.value < 0) {
         str += `(${stringify(left, prec)})`;
       } else {
         str += stringify(left, prec);
       }
 
       str += order[op] ? ` ${node.operator} ` : node.operator;
-      
+
       // @fix: postcss-values-parser error
-      if (right.type === 'MathExpression' && order[op] < order[right.operator] || right.type === 'Value' && right.value < 0) {
+      if (right.type === 'MathExpression' && order[op] < order[right.operator] || right.type === 'Number' && right.value < 0) {
         str += `(${stringify(right, prec)})`;
       } else {
         str += stringify(right, prec);
